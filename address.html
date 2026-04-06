@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Delivery Co. — Address Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6723;--dark:#1C2028;--medium:#3D4852;--muted:#8A9099;
+  --bg:#FAFAFA;--bg-light:#F0F1F2;--bg-warm:#F5EDE4;--white:#FFFFFF;
+  --success:#00B050;--success-dark:#003D29;
+  --success-bg:#EEF8F3;--success-border:#9FDCBC;
+  --border:#E2E5E9;--border-light:#ECEEF0;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
+  --shadow-lg:0 8px 32px rgba(28,32,40,.12);
+}
+html{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg)}
+body{min-height:100vh}
+.nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1060px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px}
+.nav-brand{display:flex;align-items:center;gap:8px;padding:14px 0}
+.nav-dot{width:28px;height:28px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-dot svg{width:16px;height:16px;fill:white}
+.nav-name{font-size:13px;font-weight:600;color:var(--dark)}
+.nav-sub{font-size:11px;color:var(--muted)}
+.nav-tag{padding:3px 10px;border-radius:20px;background:var(--bg-warm);border:1px solid #E8CEBA;font-size:11px;font-weight:500;color:var(--orange)}
+.page{max-width:1060px;margin:0 auto;padding:28px 24px 60px}
+.ph-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ph-title{font-size:22px;font-weight:600;color:var(--dark);line-height:1.25;margin-bottom:4px;letter-spacing:-.02em}
+.ph-sub{font-size:13px;color:var(--medium);margin-bottom:20px}
+.mobile-wrap{display:flex;justify-content:center;padding-top:8px}
+.mobile-frame{width:100%;max-width:390px;background:var(--white);border-radius:32px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(0,0,0,.06);overflow:hidden;min-height:600px}
+.mobile-status{background:var(--white);padding:12px 24px 0;display:flex;justify-content:space-between;align-items:center}
+.mobile-status-time{font-size:12px;font-weight:600;color:var(--dark)}
+.mobile-status-icons{display:flex;gap:5px;align-items:center}
+.mobile-status-icons span{font-size:11px;color:var(--dark)}
+.mobile-screen{display:none;padding:0 20px 28px;animation:fadeUp .18s ease}
+.mobile-screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.m-header{padding:16px 0 10px;display:flex;align-items:center;gap:10px}
+.m-back{width:30px;height:30px;border-radius:50%;background:var(--bg-light);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.m-title{font-size:17px;font-weight:600;color:var(--dark);letter-spacing:-.02em}
+.m-sub{font-size:12.5px;color:var(--medium);margin-bottom:14px;line-height:1.5}
+.m-section-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.m-card{background:var(--bg-light);border-radius:var(--radius);padding:13px 14px;margin-bottom:10px}
+.m-btn-primary{width:100%;padding:14px;border-radius:var(--radius);background:var(--orange);color:white;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .12s;margin-top:12px}
+.m-btn-primary:hover{background:#e85a1a}
+.m-btn-primary:disabled{background:#ccc;cursor:not-allowed}
+.addr-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:13px 14px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px}
+.addr-icon{width:34px;height:34px;border-radius:8px;background:var(--bg-warm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.addr-text-main{font-size:13px;font-weight:500;color:var(--dark);line-height:1.4}
+.addr-text-sub{font-size:11.5px;color:var(--muted)}
+.addr-change{font-size:12px;color:var(--orange);cursor:pointer;font-weight:500;margin-top:2px;display:block;background:none;border:none;font-family:inherit;padding:0}
+.upload-zone{border:1.5px dashed var(--border);border-radius:var(--radius);padding:20px 16px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px;background:var(--white)}
+.upload-zone:hover{border-color:var(--orange);background:var(--bg-warm)}
+.upload-zone.done{border-color:var(--success);border-style:solid;background:var(--success-bg)}
+.upload-icon{font-size:24px;margin-bottom:6px}
+.upload-text{font-size:12.5px;color:var(--medium);line-height:1.4}
+.upload-hint{font-size:11px;color:var(--muted);margin-top:4px}
+.upload-done-text{font-size:13px;font-weight:500;color:var(--success-dark)}
+.info-box{background:var(--bg-warm);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;font-size:12px;color:var(--medium);line-height:1.5}
+.info-box strong{color:var(--dark)}
+.next-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.next-step:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text-title{font-size:12.5px;font-weight:600;color:var(--dark)}
+.step-text-sub{font-size:11.5px;color:var(--muted);margin-top:1px;line-height:1.4}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-dot"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zm-9 7H7v-2h4v2zm6-4H7V8h10v2z"/></svg></div>
+      <div><div class="nav-name">Grocery Delivery Co.</div><div class="nav-sub">Autonomous Delivery Pilot</div></div>
+    </div>
+    <span class="nav-tag">Address Verification</span>
+  </div>
+</nav>
+<div class="page">
+  <p class="ph-label">Customer experience</p>
+  <h1 class="ph-title">Address verification flow</h1>
+  <p class="ph-sub">Before checkout, robot-eligible customers confirm their delivery location and upload an entrance photo.</p>
+  <div class="mobile-wrap">
+    <div class="mobile-frame">
+      <div class="mobile-status">
+        <span class="mobile-status-time">9:41</span>
+        <div class="mobile-status-icons"><span>▲▲▲</span><span>WiFi</span><span>🔋</span></div>
+      </div>
+
+      <!-- Screen 1: Verify -->
+      <div class="mobile-screen active" id="addr-screen">
+        <div class="m-header">
+          <button class="m-back">←</button>
+          <div class="m-title">Verify your location</div>
+        </div>
+        <p class="m-sub">Help us confirm the robot can safely station itself at your delivery address.</p>
+        <div class="m-section-label">Delivery address</div>
+        <div class="addr-card">
+          <div class="addr-icon">📍</div>
+          <div style="flex:1">
+            <div class="addr-text-main">123 Oak Street, Apt 4B</div>
+            <div class="addr-text-sub">San Francisco, CA 94110</div>
+            <button class="addr-change">Change address</button>
+          </div>
+        </div>
+        <div class="m-section-label" style="margin-top:4px">Entrance photo</div>
+        <div class="upload-zone" id="upload-zone" onclick="toggleUpload()">
+          <div id="upload-idle">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">Tap to upload an entrance photo</div>
+            <div class="upload-hint">Show your front door, porch, or a clear area where the robot can station itself</div>
+          </div>
+          <div id="upload-done" style="display:none">
+            <div class="upload-icon">✅</div>
+            <div class="upload-done-text">Photo uploaded</div>
+            <div class="upload-hint" style="margin-top:4px">entrance_photo.jpg · 2.4 MB</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <strong>Why we need this</strong><br>
+          The robot will use your photo to locate and safely station itself at your entrance. It will wait up to 10 minutes for you to collect your order.
+        </div>
+        <button class="m-btn-primary" id="addr-continue-btn" onclick="showConfirm()" disabled style="opacity:.45">Continue to checkout</button>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">You can skip this and choose standard delivery at checkout</div>
+      </div>
+
+      <!-- Screen 2: Confirmed -->
+      <div class="mobile-screen" id="addr-confirm-screen">
+        <div style="text-align:center;padding:40px 16px 16px">
+          <div style="font-size:48px;margin-bottom:12px">✅</div>
+          <div style="font-size:18px;font-weight:700;color:var(--dark);margin-bottom:6px">Location verified!</div>
+          <div style="font-size:13px;color:var(--medium);line-height:1.5">You're all set for robot delivery. We'll use your entrance photo to dispatch the robot directly to your door.</div>
+        </div>
+        <div class="m-card">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Verified address</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px">
+            <span style="color:var(--medium)">Address</span>
+            <span style="font-weight:500;color:var(--dark)">123 Oak St, Apt 4B</span>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px">What happens when your order arrives</div>
+        <div class="m-card" style="padding:4px 10px">
+          <div class="next-step"><div class="step-num">1</div><div><div class="step-text-title">Robot dispatched</div><div class="step-text-sub">Your robot is loaded and heading to you</div></div></div>
+          <div class="next-step"><div class="step-num">2</div><div><div class="step-text-title">Real-time tracking</div><div class="step-text-sub">Watch your delivery on the live map</div></div></div>
+          <div class="next-step"><div class="step-num">3</div><div><div class="step-text-title">Unlock with PIN</div><div class="step-text-sub">Use the PIN sent to your phone to open the cargo hatch</div></div></div>
+          <div class="next-step"><div class="step-num">4</div><div><div class="step-text-title">10-minute window</div><div class="step-text-sub">Robot waits up to 10 min before returning to store</div></div></div>
+        </div>
+        <button class="m-btn-primary" onclick="resetAddr()">Back to start</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+let uploadDone=false;
+function toggleUpload(){
+  uploadDone=!uploadDone;
+  document.getElementById('upload-idle').style.display=uploadDone?'none':'block';
+  document.getElementById('upload-done').style.display=uploadDone?'block':'none';
+  document.getElementById('upload-zone').classList.toggle('done',uploadDone);
+  const btn=document.getElementById('addr-continue-btn');
+  btn.disabled=!uploadDone;
+  btn.style.opacity=uploadDone?'1':'.45';
+}
+function showConfirm(){
+  document.getElementById('addr-screen').classList.remove('active');
+  document.getElementById('addr-confirm-screen').classList.add('active');
+}
+function resetAddr(){
+  uploadDone=false;
+  document.getElementById('upload-idle').style.display='block';
+  document.getElementById('upload-done').style.display='none';
+  document.getElementById('upload-zone').classList.remove('done');
+  const btn=document.getElementById('addr-continue-btn');
+  btn.disabled=true;btn.style.opacity='.45';
+  document.getElementById('addr-confirm-screen').classList.remove('active');
+  document.getElementById('addr-screen').classList.add('active');
+}
+</script>
+</body>
+</html>

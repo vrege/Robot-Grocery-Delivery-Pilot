@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Instacart — Autonomous Delivery Pilot</title>
+<title>Grocery Delivery Co. — Autonomous Delivery Pilot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -249,14 +249,14 @@ body{min-height:100vh}
         <svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zm-9 7H7v-2h4v2zm6-4H7V8h10v2z"/></svg>
       </div>
       <div>
-        <div class="nav-brand-text">Instacart</div>
+        <div class="nav-brand-text">Grocery Delivery Co.</div>
         <div class="nav-brand-sub">Autonomous Delivery Pilot</div>
       </div>
     </div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab(0)">Routing Logic</button>
       <button class="nav-tab" onclick="switchTab(1)">Address Verification</button>
-      <button class="nav-tab" onclick="switchTab(2)">Customer Checkout</button>
+      <button class="nav-tab" onclick="switchTab(2)">Checkout</button>
     </div>
   </div>
 </nav>
@@ -505,18 +505,31 @@ body{min-height:100vh}
           <div style="font-size:13px;color:var(--medium);line-height:1.5">You're all set for robot delivery. We'll use your entrance photo to dispatch the robot directly to your door.</div>
         </div>
         <div class="m-card">
-          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Delivery details</div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Verified address</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px">
             <span style="color:var(--medium)">Address</span>
             <span style="font-weight:500;color:var(--dark)">123 Oak St, Apt 4B</span>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
-            <span style="color:var(--medium)">Delivery type</span>
-            <span style="font-weight:500;color:var(--orange)">🤖 Robot</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:13px">
-            <span style="color:var(--medium)">Est. time</span>
-            <span style="font-weight:500;color:var(--dark)">22 minutes</span>
+        </div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px">What happens when your order arrives</div>
+        <div class="m-card" style="padding:4px 10px">
+          <div class="next-steps">
+            <div class="next-step">
+              <div class="step-num">1</div>
+              <div><div class="step-text-title">Robot dispatched</div><div class="step-text-sub">Your robot is loaded and heading to you</div></div>
+            </div>
+            <div class="next-step">
+              <div class="step-num">2</div>
+              <div><div class="step-text-title">Real-time tracking</div><div class="step-text-sub">Watch your delivery on the live map</div></div>
+            </div>
+            <div class="next-step">
+              <div class="step-num">3</div>
+              <div><div class="step-text-title">Unlock with PIN</div><div class="step-text-sub">Use the PIN sent to your phone to open the cargo hatch</div></div>
+            </div>
+            <div class="next-step">
+              <div class="step-num">4</div>
+              <div><div class="step-text-title">10-minute window</div><div class="step-text-sub">Robot waits up to 10 min before returning to store</div></div>
+            </div>
           </div>
         </div>
         <button class="m-btn-primary" onclick="showScreen('addr-screen');uploadReset()">Back to start</button>
@@ -553,19 +566,19 @@ body{min-height:100vh}
         <div class="m-section-label">Items (3)</div>
         <div class="m-card" style="padding:4px 10px">
           <div class="item-row">
-            <div class="item-emoji">🍎</div>
-            <div style="flex:1"><div class="item-name">Organic Apples</div><div class="item-qty">Qty 2</div></div>
-            <div class="item-price">$9.98</div>
+            <div class="item-emoji">📚</div>
+            <div style="flex:1"><div class="item-name">Reading Project Hail Mary for the First Time Again</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$14.99</div>
           </div>
           <div class="item-row">
-            <div class="item-emoji">🥛</div>
-            <div style="flex:1"><div class="item-name">Greek Yogurt</div><div class="item-qty">Qty 1</div></div>
-            <div class="item-price">$5.49</div>
+            <div class="item-emoji">🎾</div>
+            <div style="flex:1"><div class="item-name">A Better Forehand Volley in Tennis</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$9.99</div>
           </div>
           <div class="item-row">
-            <div class="item-emoji">🍞</div>
-            <div style="flex:1"><div class="item-name">Whole Wheat Bread</div><div class="item-qty">Qty 1</div></div>
-            <div class="item-price">$3.29</div>
+            <div class="item-emoji">💌</div>
+            <div style="flex:1"><div class="item-name">Grocery Delivery Co. APM Offer Letter</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$0.00</div>
           </div>
         </div>
 
@@ -575,7 +588,7 @@ body{min-height:100vh}
             <div class="dc-icon">🤖</div>
             <div class="dc-name">Robot delivery</div>
             <div class="dc-fee">$3.00</div>
-            <div class="dc-eta">ETA: 22 mins</div>
+            <div class="dc-eta">ETA: 30–35 mins</div>
           </div>
           <div class="delivery-card" id="dc-human" onclick="selectDelivery('human')">
             <div class="dc-icon">🛍️</div>
@@ -595,7 +608,7 @@ body{min-height:100vh}
         </div>
 
         <div class="order-summary">
-          <div class="summary-row"><span>Subtotal</span><span>$18.76</span></div>
+          <div class="summary-row"><span>Subtotal</span><span>$24.98</span></div>
           <div class="summary-row"><span>Delivery fee</span><span id="s1-fee">—</span></div>
           <div class="summary-row"><span>Service fee</span><span>$2.00</span></div>
           <div class="summary-row"><span style="font-weight:700">Total</span><span id="s1-total">—</span></div>
@@ -611,8 +624,8 @@ body{min-height:100vh}
           <div class="confirm-title">Order confirmed!</div>
           <div style="font-size:13px;color:var(--medium)">Your robot is being dispatched</div>
           <div class="complete-meta">
-            <div class="meta-item"><div class="meta-val">$21.76</div><div class="meta-lbl">Total</div></div>
-            <div class="meta-item"><div class="meta-val">22 min</div><div class="meta-lbl">ETA</div></div>
+            <div class="meta-item"><div class="meta-val">$29.98</div><div class="meta-lbl">Total</div></div>
+            <div class="meta-item"><div class="meta-val">32 min</div><div class="meta-lbl">ETA</div></div>
             <div class="meta-item"><div class="meta-val">#4829</div><div class="meta-lbl">PIN</div></div>
           </div>
         </div>
@@ -712,10 +725,10 @@ body{min-height:100vh}
       <div class="mobile-screen" id="co-s4">
         <div class="complete-hero">
           <div class="complete-icon">⭐</div>
-          <div class="complete-title">Delivered in 22 mins</div>
+          <div class="complete-title">Delivered in 32 mins</div>
           <div style="font-size:13px;color:var(--medium)">Saved 13–18 min vs. standard delivery</div>
           <div class="complete-meta">
-            <div class="meta-item"><div class="meta-val">22 min</div><div class="meta-lbl">Delivery time</div></div>
+            <div class="meta-item"><div class="meta-val">32 min</div><div class="meta-lbl">Delivery time</div></div>
             <div class="meta-item"><div class="meta-val">$3.00</div><div class="meta-lbl">Fee paid</div></div>
             <div class="meta-item"><div class="meta-val">$7.00</div><div class="meta-lbl">Saved</div></div>
           </div>
@@ -748,7 +761,6 @@ body{min-height:100vh}
         <textarea class="feedback-area" rows="3" placeholder="Any feedback? (optional)"></textarea>
 
         <button class="m-btn-primary" onclick="resetCheckout()">Order again</button>
-        <button class="m-btn-secondary" onclick="switchTab(0)">View routing logic →</button>
       </div>
 
     </div><!-- /mobile-frame -->
@@ -925,7 +937,7 @@ function selectDelivery(type){
   }
   // update fee + total
   const fee=type==='robot'?'$3.00':'$10.00';
-  const total=type==='robot'?'$23.76':'$30.76';
+  const total=type==='robot'?'$29.98':'$36.98';
   document.getElementById('s1-fee').textContent=fee;
   document.getElementById('s1-total').textContent=total;
   updatePlaceBtn();

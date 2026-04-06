@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Delivery Co. — Checkout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#FF6723;--amber:#FFB340;--dark:#1C2028;--medium:#3D4852;--muted:#8A9099;
+  --bg:#FAFAFA;--bg-light:#F0F1F2;--bg-warm:#F5EDE4;--white:#FFFFFF;
+  --success:#00B050;--success-dark:#003D29;
+  --success-bg:#EEF8F3;--success-border:#9FDCBC;
+  --warn-bg:#FFF8EC;--warn-border:#FFB340;
+  --border:#E2E5E9;--border-light:#ECEEF0;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
+  --shadow-lg:0 8px 32px rgba(28,32,40,.12);
+}
+html{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:var(--bg)}
+body{min-height:100vh}
+.nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1060px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:12px}
+.nav-brand{display:flex;align-items:center;gap:8px;padding:14px 0}
+.nav-dot{width:28px;height:28px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-dot svg{width:16px;height:16px;fill:white}
+.nav-name{font-size:13px;font-weight:600;color:var(--dark)}
+.nav-sub{font-size:11px;color:var(--muted)}
+.nav-tag{padding:3px 10px;border-radius:20px;background:var(--bg-warm);border:1px solid #E8CEBA;font-size:11px;font-weight:500;color:var(--orange)}
+.page{max-width:1060px;margin:0 auto;padding:28px 24px 60px}
+.ph-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ph-title{font-size:22px;font-weight:600;color:var(--dark);line-height:1.25;margin-bottom:4px;letter-spacing:-.02em}
+.ph-sub{font-size:13px;color:var(--medium);margin-bottom:20px}
+.mobile-wrap{display:flex;justify-content:center;padding-top:8px}
+.mobile-frame{width:100%;max-width:390px;background:var(--white);border-radius:32px;box-shadow:var(--shadow-lg),0 0 0 1px rgba(0,0,0,.06);overflow:hidden;min-height:600px}
+.mobile-status{background:var(--white);padding:12px 24px 0;display:flex;justify-content:space-between;align-items:center}
+.mobile-status-time{font-size:12px;font-weight:600;color:var(--dark)}
+.mobile-status-icons{display:flex;gap:5px;align-items:center}
+.mobile-status-icons span{font-size:11px;color:var(--dark)}
+.mobile-screen{display:none;padding:0 20px 28px;animation:fadeUp .18s ease}
+.mobile-screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.m-header{padding:16px 0 10px;display:flex;align-items:center;gap:10px}
+.m-title{font-size:17px;font-weight:600;color:var(--dark);letter-spacing:-.02em}
+.m-section-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.m-card{background:var(--bg-light);border-radius:var(--radius);padding:13px 14px;margin-bottom:10px}
+.m-btn-primary{width:100%;padding:14px;border-radius:var(--radius);background:var(--orange);color:white;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .12s;margin-top:12px}
+.m-btn-primary:hover{background:#e85a1a}
+.m-btn-primary:disabled{background:#ccc;cursor:not-allowed}
+
+/* Items */
+.item-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light)}
+.item-row:last-child{border-bottom:none}
+.item-emoji{font-size:20px;width:36px;height:36px;background:var(--bg-light);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.item-name{font-size:12.5px;font-weight:500;color:var(--dark);flex:1;line-height:1.3}
+.item-qty{font-size:11.5px;color:var(--muted)}
+.item-price{font-size:13px;font-weight:600;color:var(--dark);white-space:nowrap}
+
+/* Delivery options */
+.delivery-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.delivery-card{border:1.5px solid var(--border);border-radius:var(--radius);padding:11px 12px;cursor:pointer;transition:all .15s;background:var(--white)}
+.delivery-card:hover{border-color:var(--orange)}
+.delivery-card.selected{border-color:var(--orange);background:#FFF6F1}
+.dc-icon{font-size:20px;margin-bottom:4px}
+.dc-name{font-size:12.5px;font-weight:600;color:var(--dark)}
+.dc-fee{font-size:12px;font-weight:500;color:var(--orange)}
+.dc-eta{font-size:11px;color:var(--muted)}
+
+/* Warning */
+.warn-box{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius-sm);padding:11px 12px;margin-bottom:12px;font-size:12px;color:var(--dark);line-height:1.5}
+.warn-title{font-weight:600;font-size:12.5px;color:#8B5E00;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.warn-check{display:flex;align-items:flex-start;gap:8px;margin-top:8px;cursor:pointer}
+.warn-check input{margin-top:1px;accent-color:var(--orange)}
+.warn-check label{font-size:11.5px;color:var(--medium);cursor:pointer;line-height:1.4}
+
+/* Summary */
+.order-summary{background:var(--bg-light);border-radius:var(--radius);padding:12px 14px}
+.summary-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--medium);margin-bottom:5px}
+.summary-row:last-child{margin-bottom:0;font-size:13.5px;font-weight:600;color:var(--dark);border-top:1px solid var(--border);padding-top:7px;margin-top:3px}
+
+/* Confirmed */
+.confirm-hero{text-align:center;padding:24px 0 16px}
+.meta-row{display:flex;gap:16px;justify-content:center;margin-top:8px}
+.meta-item{text-align:center}
+.meta-val{font-size:16px;font-weight:700;color:var(--dark);letter-spacing:-.01em}
+.meta-lbl{font-size:10.5px;color:var(--muted)}
+.next-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.next-step:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text-title{font-size:12.5px;font-weight:600;color:var(--dark)}
+.step-text-sub{font-size:11.5px;color:var(--muted);margin-top:1px;line-height:1.4}
+
+/* Tracking */
+.track-stages{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;position:relative}
+.track-stages::before{content:'';position:absolute;top:12px;left:12px;right:12px;height:1.5px;background:var(--border);z-index:0}
+.track-stage{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}
+.stage-dot{width:22px;height:22px;border-radius:50%;background:var(--bg-light);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .3s}
+.stage-dot.done{background:var(--success);border-color:var(--success);color:white}
+.stage-dot.active{background:var(--orange);border-color:var(--orange);color:white;box-shadow:0 0 0 3px rgba(255,103,35,.2)}
+.stage-label{font-size:9.5px;color:var(--muted);font-weight:500;text-align:center;white-space:nowrap}
+.stage-label.active{color:var(--orange)}
+.stage-label.done{color:var(--success-dark)}
+.map-placeholder{background:linear-gradient(135deg,#E8F5E0 0%,#D4EAD0 50%,#C8E4C0 100%);border-radius:var(--radius);height:140px;margin-bottom:12px;position:relative;overflow:hidden;border:1px solid #C0DDB8}
+.map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);background-size:24px 24px}
+.map-store{position:absolute;left:14%;top:50%;transform:translate(-50%,-50%);font-size:18px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.map-home{position:absolute;right:12%;top:50%;transform:translate(50%,-50%);font-size:18px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.map-path{position:absolute;top:50%;left:20%;right:18%;height:2px;background:rgba(255,103,35,.35);transform:translateY(-50%)}
+.map-robot{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:18px;transition:left .5s linear;filter:drop-shadow(0 1px 3px rgba(0,0,0,.25))}
+.progress-bar-wrap{background:var(--bg-light);border-radius:999px;height:6px;margin-bottom:14px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--amber));transition:width .5s ease;width:0%}
+.eta-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.eta-label{font-size:11px;color:var(--muted)}
+.eta-value{font-size:20px;font-weight:700;color:var(--dark);letter-spacing:-.02em;font-family:'DM Mono',monospace}
+.eta-unit{font-size:11px;color:var(--muted)}
+.unlock-card{background:var(--white);border:1.5px solid var(--orange);border-radius:var(--radius-lg);padding:20px 16px;text-align:center;animation:fadeUp .25s ease}
+.unlock-pin{font-size:38px;font-weight:700;font-family:'DM Mono',monospace;color:var(--orange);letter-spacing:.15em;margin-bottom:4px}
+.unlock-btn{width:100%;padding:13px;border-radius:var(--radius);background:var(--orange);color:white;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .12s}
+.unlock-btn:hover{background:#e85a1a}
+
+/* Complete */
+.star{font-size:22px;cursor:pointer;opacity:.3;transition:all .1s;user-select:none}
+.star.on{opacity:1}
+.feedback-area{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:12.5px;font-family:'DM Sans',sans-serif;color:var(--dark);resize:none;outline:none;transition:border-color .15s;margin-bottom:10px}
+.feedback-area:focus{border-color:var(--orange)}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-dot"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v8a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zm-9 7H7v-2h4v2zm6-4H7V8h10v2z"/></svg></div>
+      <div><div class="nav-name">Grocery Delivery Co.</div><div class="nav-sub">Autonomous Delivery Pilot</div></div>
+    </div>
+    <span class="nav-tag">Customer Checkout</span>
+  </div>
+</nav>
+<div class="page">
+  <p class="ph-label">Customer experience</p>
+  <h1 class="ph-title">Checkout &amp; delivery flow</h1>
+  <p class="ph-sub">End-to-end checkout for a robot-eligible order — from basket to doorstep.</p>
+  <div class="mobile-wrap">
+    <div class="mobile-frame">
+      <div class="mobile-status">
+        <span class="mobile-status-time" id="co-clock">9:41</span>
+        <div class="mobile-status-icons"><span>▲▲▲</span><span>WiFi</span><span>🔋</span></div>
+      </div>
+
+      <!-- Screen 1: Checkout -->
+      <div class="mobile-screen active" id="co-s1">
+        <div class="m-header" style="padding-top:14px">
+          <div class="m-title">Your order</div>
+        </div>
+        <div class="m-section-label">Items (3)</div>
+        <div class="m-card" style="padding:4px 10px">
+          <div class="item-row">
+            <div class="item-emoji">📚</div>
+            <div style="flex:1"><div class="item-name">Reading Project Hail Mary for the First Time Again</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$14.99</div>
+          </div>
+          <div class="item-row">
+            <div class="item-emoji">🎾</div>
+            <div style="flex:1"><div class="item-name">A Better Forehand Volley in Tennis</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$9.99</div>
+          </div>
+          <div class="item-row">
+            <div class="item-emoji">💌</div>
+            <div style="flex:1"><div class="item-name">Grocery Delivery Co. APM Offer Letter</div><div class="item-qty">Qty 1</div></div>
+            <div class="item-price">$0.00</div>
+          </div>
+        </div>
+        <div class="m-section-label" style="margin-top:4px">Choose delivery</div>
+        <div class="delivery-options">
+          <div class="delivery-card" id="dc-robot" onclick="selectDelivery('robot')">
+            <div class="dc-icon">🤖</div>
+            <div class="dc-name">Robot delivery</div>
+            <div class="dc-fee">$3.00</div>
+            <div class="dc-eta">ETA: 30–35 mins</div>
+          </div>
+          <div class="delivery-card" id="dc-human" onclick="selectDelivery('human')">
+            <div class="dc-icon">🛍️</div>
+            <div class="dc-name">Shopper delivery</div>
+            <div class="dc-fee">$10.00</div>
+            <div class="dc-eta">ETA: 35–40 mins</div>
+          </div>
+        </div>
+        <div class="warn-box" id="robot-policy" style="display:none">
+          <div class="warn-title">⏱️ Robot wait time policy</div>
+          The robot will wait <strong>10 minutes</strong> at your location. After 10 minutes, a <strong>$10 late fee</strong> will be applied to your account.
+          <div class="warn-check">
+            <input type="checkbox" id="policy-check" onchange="updatePlaceBtn()">
+            <label for="policy-check">I understand the wait time policy and will be ready to collect my order</label>
+          </div>
+        </div>
+        <div class="order-summary">
+          <div class="summary-row"><span>Subtotal</span><span>$24.98</span></div>
+          <div class="summary-row"><span>Delivery fee</span><span id="s1-fee">—</span></div>
+          <div class="summary-row"><span>Service fee</span><span>$2.00</span></div>
+          <div class="summary-row"><span style="font-weight:700">Total</span><span id="s1-total">—</span></div>
+        </div>
+        <button class="m-btn-primary" id="place-btn" onclick="placeOrder()" disabled style="opacity:.45">Place order</button>
+      </div>
+
+      <!-- Screen 2: Confirmed -->
+      <div class="mobile-screen" id="co-s2">
+        <div class="confirm-hero">
+          <div style="font-size:48px;margin-bottom:10px">🎉</div>
+          <div style="font-size:20px;font-weight:700;color:var(--dark);letter-spacing:-.02em;margin-bottom:4px">Order confirmed!</div>
+          <div style="font-size:13px;color:var(--medium)">Your robot is being dispatched</div>
+          <div class="meta-row">
+            <div class="meta-item"><div class="meta-val">$29.98</div><div class="meta-lbl">Total</div></div>
+            <div class="meta-item"><div class="meta-val">30 min</div><div class="meta-lbl">ETA</div></div>
+            <div class="meta-item"><div class="meta-val">#4829</div><div class="meta-lbl">PIN</div></div>
+          </div>
+        </div>
+        <div class="m-section-label">What happens next</div>
+        <div class="m-card" style="padding:4px 10px">
+          <div class="next-step"><div class="step-num">1</div><div><div class="step-text-title">Robot dispatched</div><div class="step-text-sub">Your robot is loaded and heading to you</div></div></div>
+          <div class="next-step"><div class="step-num">2</div><div><div class="step-text-title">Real-time tracking</div><div class="step-text-sub">Watch your delivery on the live map</div></div></div>
+          <div class="next-step"><div class="step-num">3</div><div><div class="step-text-title">Unlock with PIN</div><div class="step-text-sub">Use code <strong>#4829</strong> to open the cargo hatch</div></div></div>
+          <div class="next-step"><div class="step-num">4</div><div><div class="step-text-title">10-minute window</div><div class="step-text-sub">Robot waits up to 10 min before returning</div></div></div>
+        </div>
+        <button class="m-btn-primary" onclick="startTracking()">Track your order →</button>
+      </div>
+
+      <!-- Screen 3: Tracking -->
+      <div class="mobile-screen" id="co-s3">
+        <div class="m-header" style="padding-top:14px">
+          <div class="m-title">Live tracking</div>
+        </div>
+        <div class="track-stages">
+          <div class="track-stage"><div class="stage-dot" id="stage-0">🚀</div><div class="stage-label" id="sl-0">Dispatch</div></div>
+          <div class="track-stage"><div class="stage-dot" id="stage-1">🤖</div><div class="stage-label" id="sl-1">En route</div></div>
+          <div class="track-stage"><div class="stage-dot" id="stage-2">📍</div><div class="stage-label" id="sl-2">Arriving</div></div>
+          <div class="track-stage"><div class="stage-dot" id="stage-3">📦</div><div class="stage-label" id="sl-3">Open cargo</div></div>
+        </div>
+        <div class="map-placeholder">
+          <div class="map-grid"></div>
+          <div class="map-store">🏪</div>
+          <div class="map-home">🏠</div>
+          <div class="map-path"></div>
+          <div class="map-robot" id="map-robot">🤖</div>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="track-progress"></div></div>
+        <div class="eta-card" id="eta-card">
+          <div>
+            <div class="eta-label">Estimated arrival</div>
+            <div style="display:flex;align-items:baseline;gap:4px">
+              <div class="eta-value" id="eta-min">30</div>
+              <div class="eta-unit">min away</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="eta-label">Status</div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--orange)" id="track-status">Dispatching…</div>
+          </div>
+        </div>
+        <div class="unlock-card" id="unlock-card" style="display:none">
+          <div style="font-size:36px;margin-bottom:8px">🔓</div>
+          <div style="font-size:16px;font-weight:700;color:var(--dark);margin-bottom:4px;letter-spacing:-.01em">Your order has arrived!</div>
+          <div style="font-size:12px;color:var(--medium);margin-bottom:14px;line-height:1.4">Enter this PIN to open the robot's cargo hatch</div>
+          <div class="unlock-pin">4829</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Cargo PIN — expires in 10 min</div>
+          <button class="unlock-btn" onclick="deliveryComplete()">I've collected my order ✓</button>
+        </div>
+      </div>
+
+      <!-- Screen 4: Complete -->
+      <div class="mobile-screen" id="co-s4">
+        <div class="confirm-hero">
+          <div style="font-size:44px;margin-bottom:8px">⭐</div>
+          <div style="font-size:19px;font-weight:700;color:var(--dark);letter-spacing:-.02em;margin-bottom:4px">Delivered in 32 mins</div>
+          <div style="font-size:13px;color:var(--medium)">Saved 3–8 min vs. standard delivery</div>
+          <div class="meta-row">
+            <div class="meta-item"><div class="meta-val">32 min</div><div class="meta-lbl">Delivery time</div></div>
+            <div class="meta-item"><div class="meta-val">$3.00</div><div class="meta-lbl">Fee paid</div></div>
+            <div class="meta-item"><div class="meta-val">$7.00</div><div class="meta-lbl">Saved</div></div>
+          </div>
+        </div>
+        <div class="m-section-label">Rate the store</div>
+        <div class="m-card">
+          <div style="font-size:12.5px;font-weight:500;color:var(--dark);margin-bottom:7px">How was the store?</div>
+          <div style="display:flex;gap:4px" id="stars-store">
+            <span class="star" onclick="rate('store',1)">★</span><span class="star" onclick="rate('store',2)">★</span><span class="star" onclick="rate('store',3)">★</span><span class="star" onclick="rate('store',4)">★</span><span class="star" onclick="rate('store',5)">★</span>
+          </div>
+        </div>
+        <div class="m-section-label">Rate robot delivery</div>
+        <div class="m-card">
+          <div style="font-size:12.5px;font-weight:500;color:var(--dark);margin-bottom:7px">How was the robot experience?</div>
+          <div style="display:flex;gap:4px" id="stars-robot">
+            <span class="star" onclick="rate('robot',1)">★</span><span class="star" onclick="rate('robot',2)">★</span><span class="star" onclick="rate('robot',3)">★</span><span class="star" onclick="rate('robot',4)">★</span><span class="star" onclick="rate('robot',5)">★</span>
+          </div>
+        </div>
+        <textarea class="feedback-area" rows="3" placeholder="Any feedback? (optional)"></textarea>
+        <button class="m-btn-primary" onclick="resetCheckout()">Order again</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+let selectedDelivery=null,policyAcked=false,trackInterval=null,trackPct=0;
+
+function selectDelivery(type){
+  selectedDelivery=type;
+  document.getElementById('dc-robot').classList.toggle('selected',type==='robot');
+  document.getElementById('dc-human').classList.toggle('selected',type==='human');
+  document.getElementById('robot-policy').style.display=(type==='robot')?'block':'none';
+  if(type!=='robot'){document.getElementById('policy-check').checked=false;policyAcked=false;}
+  const fee=type==='robot'?'$3.00':'$10.00';
+  const total=type==='robot'?'$29.98':'$36.98';
+  document.getElementById('s1-fee').textContent=fee;
+  document.getElementById('s1-total').textContent=total;
+  updatePlaceBtn();
+}
+function updatePlaceBtn(){
+  policyAcked=document.getElementById('policy-check').checked;
+  const ok=selectedDelivery&&(selectedDelivery==='human'||policyAcked);
+  const btn=document.getElementById('place-btn');
+  btn.disabled=!ok;btn.style.opacity=ok?'1':'.45';
+}
+function placeOrder(){go('co-s2');}
+function startTracking(){
+  go('co-s3');trackPct=0;clearInterval(trackInterval);
+  document.getElementById('track-progress').style.width='0%';
+  document.getElementById('eta-card').style.display='flex';
+  document.getElementById('unlock-card').style.display='none';
+  updateStages(0);
+  trackInterval=setInterval(()=>{
+    trackPct+=1.2;if(trackPct>100)trackPct=100;
+    document.getElementById('track-progress').style.width=trackPct+'%';
+    document.getElementById('map-robot').style.left=(20+trackPct*0.62)+'%';
+    document.getElementById('eta-min').textContent=Math.max(0,Math.round(30*(1-trackPct/100)));
+    let stage=0;if(trackPct>=25)stage=1;if(trackPct>=55)stage=2;if(trackPct>=82)stage=3;
+    updateStages(stage);
+    document.getElementById('track-status').textContent=['Dispatching…','En route to you','Arriving soon','Ready to unlock!'][stage];
+    if(trackPct>=82){document.getElementById('eta-card').style.display='none';document.getElementById('unlock-card').style.display='block';clearInterval(trackInterval);}
+  },180);
+}
+function updateStages(active){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('stage-'+i),l=document.getElementById('sl-'+i);
+    d.classList.remove('active','done');l.classList.remove('active','done');
+    if(i<active){d.classList.add('done');l.classList.add('done');}
+    else if(i===active){d.classList.add('active');l.classList.add('active');}
+  }
+}
+function deliveryComplete(){clearInterval(trackInterval);go('co-s4');}
+function go(id){
+  document.querySelectorAll('.mobile-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function resetCheckout(){
+  selectedDelivery=null;policyAcked=false;clearInterval(trackInterval);
+  document.getElementById('dc-robot').classList.remove('selected');
+  document.getElementById('dc-human').classList.remove('selected');
+  document.getElementById('robot-policy').style.display='none';
+  document.getElementById('policy-check').checked=false;
+  document.getElementById('s1-fee').textContent='—';
+  document.getElementById('s1-total').textContent='—';
+  document.getElementById('place-btn').disabled=true;
+  document.getElementById('place-btn').style.opacity='.45';
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('on'));
+  document.querySelector('.feedback-area').value='';
+  document.getElementById('map-robot').style.left='20%';
+  go('co-s1');
+}
+function rate(group,val){
+  document.getElementById('stars-'+group).querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<val));
+}
+function updateClock(){
+  const now=new Date(),h=now.getHours(),m=now.getMinutes();
+  document.getElementById('co-clock').textContent=h+':'+String(m).padStart(2,'0');
+}
+updateClock();setInterval(updateClock,30000);
+</script>
+</body>
+</html>
